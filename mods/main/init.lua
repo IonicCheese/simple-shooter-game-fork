@@ -1,6 +1,28 @@
 player_data = {}
 alive_players = {}
 
+local function set_player_mode(player, mode)
+	local name = player:get_player_name()
+    local privs = core.get_player_privs(name)
+ 
+    if mode == "normal" then
+        privs.fly = false
+        privs.fast = false
+        privs.noclip = false
+        privs.shout = true
+        privs.interact = true
+ 
+    elseif mode == "spectator" then
+        privs.fly = true
+        privs.fast = true
+        privs.noclip = true
+        privs.shout = false
+        privs.interact = false
+    end
+ 
+    core.set_player_privs(name, privs)
+end
+
 core.register_on_mods_loaded(function()
 	for itemname, _ in pairs(core.registered_nodes) do
 		core.override_item(itemname, {groups = {fall_damage_add_percent = -100}})
@@ -11,7 +33,7 @@ core.register_on_joinplayer(function(player)
 	core.place_schematic({x = 0, y = 0, z = 0}, core.get_modpath("main") .. "/schematics/map1.mts", 0, nil, false)
 	player:set_pos({x = 20, y = 26.5, z = 17})
 	player:get_inventory():set_list("main", {})
-	core.change_player_privs(player:get_player_name(), {["fly"] = false, ["fast"] = false, ["noclip"] = false, ["shout"] = true, ["interact"] = true})
+	set_player_mode(player, "normal")
 end)
 
 core.register_on_leaveplayer(function(player)
@@ -31,7 +53,7 @@ core.register_on_dieplayer(function(player)
 end)
 
 core.register_on_respawnplayer(function(player) 
-	core.change_player_privs(player:get_player_name(), {["fly"] = true, ["fast"] = true, ["noclip"] = true, ["shout"] = false, ["interact"] = false})
+	set_player_mode(player, "spectator")
 	player:get_inventory():set_list("main", {})
 	player_data[player] = {}
 	player_data[player].size = player:get_properties().visual_size
@@ -75,7 +97,7 @@ core.register_chatcommand("reset", {
 		for _, player in pairs(core.get_connected_players()) do
 			player:set_nametag_attributes({color = {a = 255, r = 255, g = 255, b = 255}})
 			player:set_pos({x = 20, y = 26.5, z = 17})
-			core.change_player_privs(player:get_player_name(), {["fly"] = false, ["fast"] = false, ["noclip"] = false, ["shout"] = true, ["interact"] = true})
+			set_player_mode(player, "normal")
 			player:get_inventory():set_list("main", {})
 			player:set_properties({
 				visual = "mesh",
