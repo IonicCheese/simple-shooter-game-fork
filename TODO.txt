@@ -1,7 +1,7 @@
 Lines starting with "!" are high priority
 TODO:
 
-!- Non-hardcoded maps
+!- Non-hardcoded maps - WIP, see the 'wip' branch
 - More maps
 - GUIs to do everything
 - Inventory
