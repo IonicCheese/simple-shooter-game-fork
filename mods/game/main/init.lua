@@ -286,7 +286,7 @@ core.register_on_joinplayer(function(player)
 	]])
 	player:set_properties({pointable = false})
 
-	player:set_hud_flags({
+	player:hud_set_flags({
 		minimap = false,
 		minimap_radar = false,
 	})
