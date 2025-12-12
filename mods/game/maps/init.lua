@@ -1,3 +1,4 @@
+-- Maps mod for SSG
 function place_map(map)
 	local map_path = core.get_modpath("maps") .. "/maps/"
 	local map_data = dofile(map_path .. map .. "/map.lua")
