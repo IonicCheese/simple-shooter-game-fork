@@ -12,8 +12,8 @@ local map_data = {
 	
 	start_time = 30,
 	
-	scripts = {
-		on_start = "",
+	scripts = { -- "temporary" hack to ensure there's nothing on top of the map 
+		on_start = "for x=0, 154 do\nfor y=0, 16 do\nfor z=0, 146 do\ncore.set_node({x=x,y=53+y,z=z}, {name=\"air\"})\nend\nend\nend",
 		on_barrier_remove = "",
 		on_end = ""
 	}
