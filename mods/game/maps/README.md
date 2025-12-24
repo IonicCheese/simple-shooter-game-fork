@@ -56,7 +56,7 @@ return map_data
 
 Step 9: Open Minetest/Luanti and create a new world with Simple Shooter Game.
 
-Step 10: Play the world and run `/load (your map name)` followed by `/start`.
+Step 10: Play the world and run `/start (your map name)`.
 
 Step 11: Verify the map loads and works.
 
