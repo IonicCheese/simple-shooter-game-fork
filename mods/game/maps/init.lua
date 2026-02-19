@@ -1,7 +1,7 @@
 -- Maps mod for SSG
 
 local map_path = core.get_modpath("maps") .. "/maps/"
-map_data = nil
+map_data = {}
 
 map_list = core.get_dir_list(map_path, true)
 table.sort(map_list)
@@ -14,8 +14,7 @@ function place_map(map)
 			map_pos = vector.new(1000 * (i - 1), 0, 0)
 			break
 		elseif i == #map_list then
-			map_data = nil
-			return
+			return nil
 		end
 	end
 
