@@ -50,7 +50,7 @@ function place_map(map)
 	return map_data
 end
 
-function remove_barrier(x, y, z) -- name and arguments kept for backwards compat
+function remove_barrier()
 	for _, player in pairs(core.get_connected_players()) do
 		local pos = player:get_pos()
 		player:set_pos({x=pos.x, y=map_data.barrier_level - 3.5, z=pos.z})

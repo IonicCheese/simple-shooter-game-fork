@@ -164,7 +164,7 @@ function start_match(map) -- Start the match
 			set_match_state("in_progress")
 			core.chat_send_all(core.colorize("green", "Match started!"))
 		
-			remove_barrier(map_data.size_x, map_data.barrier_level, map_data.size_z)
+			remove_barrier()
 
 			alive_players = {}
 
@@ -191,7 +191,7 @@ function end_match() -- End the match
 	set_match_state("not_started")
 
 	for _, player in pairs(core.get_connected_players()) do
-		player:set_pos(spawn_pos)
+		player:set_pos -- name kept for backwards compat(spawn_pos)
 		player:get_inventory():set_list("main", {})
 
 		player:set_inventory_formspec([[
