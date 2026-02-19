@@ -4,7 +4,7 @@ loading_tips = {
 	"Short-range is good for small/dense maps!",
 	"Mid-range is good on maps with long tunnels or open areas!",
 	"Long-range is good for maps with really open and large areas!",
-	"Ambushing can be powerful assuming your not found!",
+	"Ambushing can be powerful assuming you're not found!",
 	"Players may sneak up on you from behind!",
 	"You *can't* be shot under water!",
 	"The Short-range class can one-shot from 6 to 7 nodes away!",
