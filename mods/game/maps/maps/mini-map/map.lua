@@ -1,22 +1,14 @@
-local map_data = {
+return {
 	name = "mini-map",
-	size_x = 8,
-	size_y = 19,
-	size_z = 8,
+	size = vector.new(8, 19, 8),
 	
 	barrier_level = 15,
 	
-	spawn_x = nil,
-	spawn_y = nil,
-	spawn_z = nil,
+	spawn = nil,
 	
 	start_time = 15,
 
-    scripts = {
-		on_start = "",
-        on_barrier_remove = "",
-        on_end = ""
-    }
+    on_start 		  = nil,
+	on_end 			  = nil,
+	on_barrier_remove = nil,
 }
-
-return map_data

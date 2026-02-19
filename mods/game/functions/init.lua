@@ -1,3 +1,18 @@
+match_start_job = nil
+loading_tips = {
+	"Open the inventory to change class!",
+	"Short-range is good for small/dense maps!",
+	"Mid-range is good on maps with long tunnels or open areas!",
+	"Long-range is good for maps with really open and large areas!",
+	"Ambushing can be powerful assuming your not found!",
+	"Players may sneak up on you from behind!",
+	"You *can't* be shot under water!",
+	"The Short-range class can one-shot from 6 to 7 nodes away!",
+	"Using torches may allow enemies to sneak up on you in the dark!",
+	"Turns out if you get a sniper and zoom with it. you can zoom no matter what after that...", -- how
+	"e s p i o n a g e",
+}
+
 -- Functions for SSG
 function make_player_invisible(player) -- Hide a player (pre-match and spectator)
 	save_player_data(player)
@@ -127,30 +142,45 @@ function start_match(map) -- Start the match
 	for _, player in pairs(core.get_connected_players()) do
 		set_player_mode(player, "pre_match")
 		
-		map_loading_images[player:get_player_name()] = player:hud_add({
-			type      = "image",
-			position  = {x=0.5, y=0.5},
-			image_scale = 100,
-			text      = "map_loading.png",
-			scale     = {x=-100, y=-100},
-			z_index = 1000,
-		})
+		map_loading_images[player:get_player_name()] = {
+			loading = player:hud_add({
+				type      = "image",
+				position  = {x=0.5, y=0.5},
+				image_scale = 100,
+				text      = "map_loading.png",
+				scale     = {x=-100, y=-100},
+				z_index = 1000,
+			}),
+			
+			info = player:hud_add({
+				type      = "text",
+				position  = {x=0.5, y=0.7},
+				text      = loading_tips[math.random(1, #loading_tips)],
+				number 	  = 0xFFFFFF,
+				z_index = 1000,
+			})
+		}
 
 		give_player_items(player)
 
-		player:set_pos({x = map_data.spawn_x, y = map_data.spawn_y, z = map_data.spawn_z})
+		player:set_pos(map_data.spawn)
 
 		player:set_hp(20)
 	end
 	
 	core.after(3, function()
 		for _, player in pairs(core.get_connected_players()) do
-			player:set_pos({x = map_data.spawn_x, y = map_data.spawn_y, z = map_data.spawn_z})
-			player:hud_remove(map_loading_images[player:get_player_name()])
+			player:set_pos(map_data.spawn)
+			
+			for _, id in pairs(map_loading_images[player:get_player_name()]) do
+				player:hud_remove(id)
+			end
 		end
 
 	
-		assert(loadstring(map_data.scripts.on_start or ""))()
+		if map_data.on_start then
+			map_data.on_start()
+		end
 		
 		core.chat_send_all(core.colorize("#b011f9", string.format("Match about to start in %d seconds!\nOpen inventory to change class!", map_data.start_time)))
 
@@ -160,11 +190,12 @@ function start_match(map) -- Start the match
 			end)
 		end
 
-		core.after(map_data.start_time, function()
+		match_start_job = core.after(map_data.start_time, function()
+			match_start_job = nil
 			set_match_state("in_progress")
 			core.chat_send_all(core.colorize("green", "Match started!"))
 		
-			remove_barrier(map_data.size_x, map_data.barrier_level, map_data.size_z)
+			remove_barrier()
 
 			alive_players = {}
 
@@ -189,6 +220,14 @@ end
 
 function end_match() -- End the match
 	set_match_state("not_started")
+
+	if match_start_job ~= nil then
+		match_start_job:cancel()
+	end
+
+	if map_data.on_end then
+		map_data.on_end()
+	end
 
 	for _, player in pairs(core.get_connected_players()) do
 		player:set_pos(spawn_pos)
@@ -250,8 +289,6 @@ function kill_player(player, reason) -- Handle killed/disconnected players prope
 	if #alive_player_names == 1 then
 		local winner_name = alive_player_names[1]
 		core.chat_send_all(core.colorize("green", winner_name .. " is the winner!"))
-		
-		assert(loadstring(map_data.scripts.on_end or ""))()
 
 		set_match_state("post_match")
 

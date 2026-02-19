@@ -2,9 +2,11 @@
 function place_map(map)
 	local map_path = core.get_modpath("maps") .. "/maps/"
 	local map_list = core.get_dir_list(map_path, true)
+	local map_pos = vector.new(0, 0, 0)
 
 	for i = 1, #map_list do
 		if map_list[i] == map then
+			map_pos = vector.new(1000 * (i - 1), 0, 0)
 			break
 		elseif i == #map_list then
 			return "nope :("
@@ -12,12 +14,11 @@ function place_map(map)
 	end
 
 	local map_data = dofile(map_path .. map .. "/map.lua")
-	core.place_schematic({x=0, y=0, z=0}, map_path .. map .. "/map.mts", 0, nil, true)
+	map_data.pos = map_pos
+	core.place_schematic(map_pos, map_path .. map .. "/map.mts", 0, nil, true)
 	
-	if map_data.spawn_x == nil or map_data.spawn_y == nil or map_data.spawn_z == nil then -- set a default spawnpoint if not set
-		map_data.spawn_x = map_data.size_x / 2
-		map_data.spawn_y = map_data.barrier_level + 1
-		map_data.spawn_z = map_data.size_z / 2
+	if not map_data.spawn then -- set a default spawnpoint if not set
+		map_data.spawn = vector.new(map_data.size.x / 2, map_data.barrier_level + 1, map_data.size.z / 2) + map_pos
 	end
 	
 	if map_data.start_time == nil or map_data.start_time <= 0 then
@@ -50,12 +51,15 @@ function place_map(map)
 	return map_data
 end
 
-function remove_barrier(x, y, z)
+function remove_barrier()
 	for node_x = 1, x - 2 do
 		for node_z = 1, z - 2 do
 			core.set_node({x = node_x, y = y - 1, z = node_z}, {name = "air"}) -- account for the fact that lua counts starting at 1... i think.... whatever, it works \_('_')_/
 		end
 	end
-	assert(loadstring(map_data.scripts.on_barrier_remove or ""))()
+	if map_data.on_barrier_remove then
+		map_data.on_barrier_remove()
+	end
+
 	return ""
 end

@@ -1,12 +1,12 @@
 return {
-	name = "forest",
-	size = vector.new(155, 53, 147),
-
-	barrier_level = 49, -- <- Y level of the barrier
+	name = "snow",
+	size = vector.new(267, 100, 335),
+	
+	barrier_level = 97, -- <- Y level of the barrier
 	
 	spawn = nil,
 	
-	start_time = 30,
+	start_time = 45,
 	
 	on_start 		  = nil,
 	on_end 			  = nil,

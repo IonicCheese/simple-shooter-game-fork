@@ -28,7 +28,7 @@ core.register_chatcommand("stop", {
 	privs = {match_manager = true},
 	description = "Terminate the match",
 	func = function()
-		if match_state ~= "pre_match" and match_state ~= "post_match" and match_state ~= "not_started" then
+		if match_state ~= "post_match" and match_state ~= "not_started" then
 			core.chat_send_all(core.colorize("red", "Match terminated."))
 			end_match()
 
@@ -36,5 +36,19 @@ core.register_chatcommand("stop", {
 		end
 
 		return false, "Match cannot be terminated at the moment."
+	end
+})
+
+core.register_chatcommand("list_maps", {
+	params = "",
+	privs = {match_manager = true},
+	description = "List all maps",
+	func = function()
+		local maps = core.get_dir_list(core.get_modpath("maps") .. "/maps", true)
+		local map_list = "Available maps:\n"
+		for _, map in pairs(maps) do
+			map_list = map_list .. map .. "\n"
+		end
+		return true, map_list .. "\nUse /start <map> to start a match."
 	end
 })
