@@ -183,7 +183,7 @@ function start_match(map) -- Start the match
 		
 		core.chat_send_all(core.colorize("#b011f9", string.format("Match about to start in %d seconds!\nOpen inventory to change class!", map_data.start_time)))
 
-		match_start_jobs.countdown = {}
+		match_start_jobs = {countdown = {}, map = nil}
 		for i = 10, 1, -1 do -- count down from 10 to 1 (yes you are free to set me on fire for this horrible solution)
 			table.insert(match_start_jobs.countdown, core.after(map_data.start_time - 10 + i, function()
 				core.chat_send_all(core.colorize("green", string.format("Match starts in %d second%s.", 11 - i, 11 - i == 1 and "" or "s"))) -- <- RIP readability
@@ -191,7 +191,7 @@ function start_match(map) -- Start the match
 		end
 
 		match_start_jobs.map = core.after(map_data.start_time, function()
-			match_start_jobs = {}
+			match_start_jobs = nil
 			set_match_state("in_progress")
 			core.chat_send_all(core.colorize("green", "Match started!"))
 		
@@ -221,14 +221,14 @@ end
 function end_match() -- End the match
 	set_match_state("not_started")
 
-	if match_start_job ~= {} then
+	if match_start_jobs then
 		match_start_jobs.map:cancel()
 
 		for _, job in pairs(match_start_jobs.countdown) do
 			job:cancel()
 		end
 
-		match_start_jobs = {}
+		match_start_jobs = nil
 	end
 
 	if map_data.on_end then
