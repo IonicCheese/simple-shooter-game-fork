@@ -230,7 +230,7 @@ function end_match() -- End the match
 	end
 
 	for _, player in pairs(core.get_connected_players()) do
-		player:set_pos -- name kept for backwards compat(spawn_pos)
+		player:set_pos(spawn_pos)
 		player:get_inventory():set_list("main", {})
 
 		player:set_inventory_formspec([[
