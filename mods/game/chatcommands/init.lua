@@ -39,7 +39,7 @@ core.register_chatcommand("stop", {
 	end
 })
 
-core.register_chatcommand("list_maps", {
+core.register_chatcommand("maps", {
 	params = "",
 	privs = {match_manager = true},
 	description = "List all maps",
