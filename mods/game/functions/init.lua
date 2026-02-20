@@ -9,7 +9,6 @@ loading_tips = {
 	"You *can't* be shot under water!",
 	"The Short-range class can one-shot from 6 to 7 nodes away!",
 	"Using torches may allow enemies to sneak up on you in the dark!",
-	"Turns out if you get a sniper and zoom with it, you can zoom no matter what after that...", -- how
 	"e s p i o n a g e",
 }
 
