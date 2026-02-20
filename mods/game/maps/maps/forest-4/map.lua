@@ -2,13 +2,13 @@ return {
     name = "forest-4",
     size = vector.new(190, 69, 155),
 
-    barrier_level = 65,
+	barrier_level = 65,
 
-  	spawn = nil,
+	spawn = nil,
 
-    start_time = 30,
+	start_time = 30,
 
-   	on_start 		  = nil,
+	on_start 		  = nil,
 	on_end 			  = nil,
 	on_barrier_remove = nil,
 
